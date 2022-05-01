@@ -36,17 +36,37 @@ contract ERC721AMock is ERC721A {
         _safeMint(to, quantity, _data);
     }
 
-    function benchmarkOwnerOf(uint256 tokenId) public returns (address owner) {
-        uint256 gasBefore = gasleft();
-        owner = ownerOf(tokenId);
-        uint256 gasAfter = gasleft();
-        console.log(gasBefore - gasAfter);
-    }
-
     function burn(uint256 start, uint256 num) public {
         uint256 end = start + num;
         for(uint256 i=start;i<end;i++){
             _burn(i);
         }
+    }
+
+    function benchmarkContractMethods(uint256 _tokenId, address _owner) public {
+        
+        console.log("benchmarkContractMethods ERC721AMock");
+        console.log("  - _tokenId:   ", _tokenId);
+        console.log("  - _owner:     ", _owner);
+        console.log("  - totalSupply:", totalSupply());
+
+        // ownerOf
+        uint256 gasBefore = gasleft();
+        address owner = ownerOf(_tokenId);
+        uint256 gasAfter = gasleft();
+        console.log("  - gas:", gasBefore - gasAfter, "method ownerOf(_tokenId) - owner:", owner);
+
+        // balanceOf
+        gasBefore = gasleft();
+        uint256 _balance = balanceOf(_owner);
+        gasAfter = gasleft();
+        console.log("  - gas:", gasBefore - gasAfter, "method balanceOf(_owner) - _balance:", _balance);
+
+        // ownerOf
+        gasBefore = gasleft();
+        uint256 _tokenOfOwnerByIndex = tokenOfOwnerByIndex(_owner, _balance - 1);
+        gasAfter = gasleft();
+        console.log("  - gas:", gasBefore - gasAfter, "method tokenOfOwnerByIndex(_tokenId) - _token:", _tokenOfOwnerByIndex);
+
     }
 }

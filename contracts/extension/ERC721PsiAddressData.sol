@@ -46,10 +46,10 @@ abstract contract ERC721PsiAddressData is ERC721Psi {
         view 
         virtual 
         override 
-        returns (uint) 
+        returns (uint256 _balance) 
     {
         require(owner != address(0), "ERC721Psi: balance query for the zero address");
-        return uint256(_addressData[owner].balance);   
+        _balance = uint256(_addressData[owner].balance);   
     }
 
     /**
