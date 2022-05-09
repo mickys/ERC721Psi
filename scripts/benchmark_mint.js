@@ -15,11 +15,20 @@ async function main() {
     ERC721Psi = await ERC721Psi.deploy("ERC721Psi", "ERC721Psi");
     ERC721Psi = await ERC721Psi.deployed();
 
-    //console.log("ERC721Psi deployed to:", ERC721Psi.address);
+    let ERC721PsiAddressData = await hre.ethers.getContractFactory("ERC721PsiAddressDataMock");
+    ERC721PsiAddressData = await ERC721PsiAddressData.deploy("ERC721PsiAddressData", "ERC721PsiAddressData");
+    ERC721PsiAddressData = await ERC721PsiAddressData.deployed();
+
+    let ERC721PsiIndexed = await hre.ethers.getContractFactory("ERC721PsiIndexedMock");
+    ERC721PsiIndexed = await ERC721PsiIndexed.deploy("ERC721PsiIndexed", "ERC721PsiIndexed");
+    ERC721PsiIndexed = await ERC721PsiIndexed.deployed();
+
+    // console.log("ERC721Psi deployed to:           ", ERC721Psi.address);
+    // console.log("ERC721PsiAddressData deployed to:", ERC721PsiAddressData.address);
+    // console.log("ERC721PsiIndexed deployed to:    ", ERC721PsiIndexed.address);
 
     let ERC721A = await hre.ethers.getContractFactory("ERC721AMock");
     ERC721A = await ERC721A.deploy("ERC721A", "ERC721A");
-
     ERC721A = await ERC721A.deployed();
 
     //console.log("ERC721A deployed to:", ERC721A.address);
@@ -32,12 +41,18 @@ async function main() {
     // Mint at least one token before to initialize most of the parameters, 
     // so the result fits the real world scenerio better
     await ERC721Psi['safeMint(address,uint256)'](user1.address, 1);
+    await ERC721PsiAddressData['safeMint(address,uint256)'](user1.address, 1);
+    await ERC721PsiIndexed['safeMint(address,uint256)'](user1.address, 1);
     await ERC721A['safeMint(address,uint256)'](user1.address, 1);
     await ERC721Enumerable['safeMintBatch(address,uint256)'](user1.address, 1);
 
     console.log(i);
     let erc721Psi_mint = await ERC721Psi['safeMint(address,uint256)'](deployer.address, i);
     console.log("ERC721Psi Mint", (await erc721Psi_mint.wait()).gasUsed.toString());
+    let ERC721PsiAddressData_mint = await ERC721PsiAddressData['safeMint(address,uint256)'](deployer.address, i);
+    console.log("ERC721PsiAddressData Mint", (await ERC721PsiAddressData_mint.wait()).gasUsed.toString());
+    let ERC721PsiIndexed_mint = await ERC721PsiIndexed['safeMint(address,uint256)'](deployer.address, i);
+    console.log("ERC721PsiIndexed Mint", (await ERC721PsiIndexed_mint.wait()).gasUsed.toString());
     let erc721a_mint = await ERC721A['safeMint(address,uint256)'](deployer.address, i);
     console.log("ERC721A Mint", (await erc721a_mint.wait()).gasUsed.toString());
     let erc721enumerable_mint = await ERC721Enumerable['safeMintBatch(address,uint256)'](deployer.address, i);
